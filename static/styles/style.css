@@ -6,7 +6,7 @@
 
 @font-face {
   font-family: "Copperplate";
-  src: url("./assets/fonts/Copperplate.otf");
+  src: url("../fonts/Copperplate.otf");
 }
 
 body {
@@ -76,7 +76,7 @@ body {
   height: 100%;
   width: 40%;
   border-radius: 30px;
-  background-image: url("./assets/img/wallpaper.jpg");
+  background-image: url("../img/wallpaper.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;

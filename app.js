@@ -1,19 +1,35 @@
 const express = require("express");
+const sqlite3 = require("sqlite3");
 const port = 3000;
 
 const app = express();
 
-const info =
-  'Você está na página "info" <br/> <a href="/"> VOltar para index<a/>';
+const db = new sqlite3.Database("user.db");
 
-app.get("/", (req, res) => {
-  res.send("Olá SESI");
+db.serialize(() => {
+  db.run(
+    "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT)"
+  );
 });
 
-app.get("/info", (req, res) => {
-  res.send(info);
+app.use("/static", express.static(__dirname + "/static"));
+app.set("view engine", "ejs");
+
+app.get("/login", (req, res) => {
+  res.render("login");
+});
+
+app.post("/login", (req, res) => {
+  const name = req.body.name;
+  const password = req.body.password;
+
+  if (name !== null || password !== null) {
+    db.run(
+      `INSERT INTO users (username, password) VALUES (${name}, ${password})`
+    );
+  }
 });
 
 app.listen(port, () => {
-  console.log(`Servidor HTTP rodando na porta 3001`);
+  console.log("Servidor em execução na porta 3000");
 });
