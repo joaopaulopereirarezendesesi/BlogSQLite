@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>S2_AT1_R3_PEND</title>
+  </head>
+  <body>
+    <section class="father">
+      <section class="img">
+        <section class="black">
+          <h1 class="imgh1">Crie sua conta!</h1>
+          <p class="imgp">
+            Compartilhe suas aventuras e descubra novos lugares ao redor do
+            mundo
+          </p>
+        </section>
+      </section>
+      <section class="forms">
+        <section class="sectext">
+          <h1 class="formsh1">Cadastre-se</h1>
+          <p class="formsp">
+            Preencha os campos abaixo e trone-se parte da nossa comunidade
+          </p>
+        </section>
+        <form action="" method="get" class="form" id="cadastroForm">
+          <section>
+            <input type="text" name="name" id="name" placeholder=" " />
+            <label for="name" class="name">Nome</label>
+          </section>
+          <section>
+            <input
+              type="email"
+              name="email"
+              id="email"
+              placeholder=" "
+              required
+            />
+            <label for="email" class="email">Email</label>
+          </section>
+          <section>
+            <input
+              type="password"
+              name="password"
+              id="password"
+              placeholder=" "
+              required
+            />
+            <label for="password" class="password">Senha</label>
+          </section>
+          <section>
+            <input
+              type="text"
+              name="cpassword"
+              id="cpassword"
+              placeholder=" "
+              required
+            />
+            <label for="cpassword" class="cpassword">Confirmar senha</label>
+          </section>
+          <section>
+            <input type="text" name="tel" id="tel" placeholder=" " required />
+            <label for="tel" class="tel">Celular</label>
+          </section>
+          <section>
+            <input type="text" name="cpf" id="cpf" placeholder=" " required />
+            <label for="cpf" class="cpf">CPF</label>
+          </section>
+          <section class="rg">
+            <input type="text" name="rg" id="rg" placeholder=" " required />
+            <label for="rg" class="rg">RG</label>
+          </section>
+          <section class="btnarea">
+            <p class="msgError"></p>
+            <button type="submit">Enviar</button>
+          </section>
+        </form>
+      </section>
+    </section>
+    <script src="script.js"></script>
+  </body>
+</html>
