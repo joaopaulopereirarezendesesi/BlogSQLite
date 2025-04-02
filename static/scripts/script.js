@@ -8,13 +8,48 @@ const CPF = document.getElementById("cpf");
 const RG = document.getElementById("rg");
 const msgError = document.getElementsByClassName("msgError");
 
+async function sendrequesty(nome, email, senha, consenha, celular, cpf, rg) {
+  await fetch("http://localhost:3000/cadastro", {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({
+      nome: nome,
+      rg: rg,
+      cpf: cpf,
+      senha: senha,
+      consenha: consenha,
+      celular: celular,
+      email: email,
+    }),
+  });
+}
+
 const createDisplayMsgError = (mensagem) => {
-  msgError[0].textContent = mensagem;
+  if (msgError.length > 0) {
+    msgError[0].textContent = mensagem;
+  }
 };
 
-function checkPasswordMatch() {
-  return senha.value === ConSenha.value ? true : false;
-}
+const checkPasswordMatch = () => senha.value === ConSenha.value;
+const checkNome = () => /^[A-Za-zÁ-ÿ\s]+$/.test(nome.value);
+const checkEmail = (email) =>
+  ["gmail.com", "outlook.com", "hotmail.com"].includes(
+    email.split("@")[1]?.toLowerCase()
+  );
+
+const checkPasswordStrength = (senha) => {
+  if (!/[a-z]/.test(senha))
+    return "A senha deve ter pelo menos uma letra minúscula!";
+  if (!/[A-Z]/.test(senha))
+    return "A senha deve ter pelo menos uma letra maiúscula!";
+  if (!/[\W_]/.test(senha))
+    return "A senha deve ter pelo menos um caractere especial!";
+  if (!/\d/.test(senha)) return "A senha deve ter pelo menos um número!";
+  if (senha.length < 8) return "A senha deve ter pelo menos 8 caracteres!";
+  return null;
+};
 
 const maskPhoneNumber = (event) => {
   let telefone = event.target.value;
@@ -87,87 +122,60 @@ const maskRgNumber = (event) => {
   event.target.value = rg;
 };
 
-const checkNome = () => {
-  const nomeRegex = /^[A-Za-zÁ-ÿ\s]+$/;
-  return nomeRegex.test(nome.value);
-};
-
-const checkEmail = (email) => {
-  const partesEmail = email.split("@");
-
-  if (
-    (partesEmail.length === 2 &&
-      partesEmail[1].toLowerCase() === "gmail.com") ||
-    (partesEmail.length === 2 &&
-      partesEmail[1].toLowerCase() === "outlook.com") ||
-    (partesEmail.length === 2 && partesEmail[1].toLowerCase() === "hotmail.com")
-  ) {
-    return true;
-  } else {
-    return false;
-  }
-};
-
-function checkPasswordStrength(senha) {
-  if (!/[a-z]/.test(senha)) {
-    return "A senha deve ter pelo menos uma letra minúscula!";
-  }
-  if (!/[A-Z]/.test(senha)) {
-    return "A senha deve ter pelo menos uma letra maiúscula!";
-  }
-  if (!/[W_]/.test(senha)) {
-    return "A senha deve ter pelo menos um caracter especial!";
-  }
-  if (!/\d/.test(senha)) {
-    return "A senha deve ter pelo menos um numero!";
-  }
-  if (senha.length < 8) {
-    return "A senha deve ter pelo menos 8 caracteres!";
-  }
-
-  return null;
-}
-
-formulario.addEventListener("submit", function (e) {
-  e.preventDefault();
-  console.log(nome.value);
-  console.log(email.value);
-  console.log(senha.value);
-  console.log(ConSenha.value);
-  console.log(Celular.value);
-  console.log(CPF.value);
-  console.log(RG.value);
-  console.log(msgError.value);
-});
-
-nome.addEventListener("input", () => {
-  if (nome.value && !checkNome()) {
-    createDisplayMsgError(
-      "O nome não pode conter numeros ou caracteres especiais!"
-    );
-  } else {
-    createDisplayMsgError("");
-  }
-});
-
-email.addEventListener("input", () => {
-  if (email.value && !checkEmail(email.value)) {
-    createDisplayMsgError("O email digitado não e valido!");
-  } else {
-    createDisplayMsgError("");
-  }
-});
-
-senha.addEventListener("input", () => {
-  if (senha.value && checkPasswordStrength(senha.value)) {
-    createDisplayMsgError(checkPasswordStrength(senha.value));
-  } else {
-    createDisplayMsgError("");
-  }
-});
+nome.addEventListener("input", () =>
+  createDisplayMsgError(
+    checkNome() ? "" : "O nome não pode conter números ou caracteres especiais!"
+  )
+);
+email.addEventListener("input", () =>
+  createDisplayMsgError(
+    checkEmail(email.value) ? "" : "O email digitado não é válido!"
+  )
+);
+senha.addEventListener("input", () =>
+  createDisplayMsgError(checkPasswordStrength(senha.value) || "")
+);
 
 Celular.addEventListener("input", maskPhoneNumber);
-
 CPF.addEventListener("input", maskCpfNumber);
-
 RG.addEventListener("input", maskRgNumber);
+
+const fetchDatas = (event) => {
+  event.preventDefault();
+
+  if (!checkNome())
+    return createDisplayMsgError(
+      "O nome não pode conter números ou caracteres especiais!"
+    );
+  if (!checkEmail(email.value))
+    return createDisplayMsgError("O email digitado não é válido!");
+  if (!checkPasswordMatch())
+    return createDisplayMsgError("As senhas digitadas não coincidem!");
+
+  const senhaError = checkPasswordStrength(senha.value);
+  if (senhaError) return createDisplayMsgError(senhaError);
+
+  sendrequesty(
+    nome.value,
+    email.value,
+    senha.value,
+    ConSenha.value,
+    Celular.value,
+    CPF.value,
+    RG.value
+  );
+
+  console.log(
+    JSON.stringify({
+      nome: nome.value,
+      rg: RG.value,
+      cpf: CPF.value,
+      senha: senha.value,
+      consenha: ConSenha.value,
+      celular: Celular.value,
+      email: email.value,
+    })
+  );
+};
+
+formulario.addEventListener("submit", fetchDatas);

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/static/styles/style.css" />
-    <title>S2_AT1_R3_PEND</title>
+    <title>Cadastro</title>
   </head>
   <body>
     <section class="father">
@@ -17,16 +17,19 @@
           </p>
         </section>
       </section>
+
       <section class="forms">
         <section class="sectext">
           <h1 class="formsh1">Cadastre-se</h1>
           <p class="formsp">
-            Preencha os campos abaixo e trone-se parte da nossa comunidade
+            Preencha os campos abaixo e torne-se parte da nossa comunidade.
           </p>
         </section>
-        <form action="" method="get" class="form" id="cadastroForm">
+
+        <!-- Formulário corrigido -->
+        <form action="/register" method="post" class="form" id="cadastroForm">
           <section>
-            <input type="text" name="name" id="name" placeholder=" " />
+            <input type="text" name="name" id="name" placeholder=" " required />
             <label for="name" class="name">Nome</label>
           </section>
           <section>
@@ -51,7 +54,7 @@
           </section>
           <section>
             <input
-              type="text"
+              type="password"
               name="cpassword"
               id="cpassword"
               placeholder=" "
@@ -67,10 +70,11 @@
             <input type="text" name="cpf" id="cpf" placeholder=" " required />
             <label for="cpf" class="cpf">CPF</label>
           </section>
-          <section class="rg">
+          <section>
             <input type="text" name="rg" id="rg" placeholder=" " required />
             <label for="rg" class="rg">RG</label>
           </section>
+
           <section class="btnarea">
             <p class="msgError"></p>
             <button type="submit">Enviar</button>
@@ -78,6 +82,7 @@
         </form>
       </section>
     </section>
+
     <script src="/static/scripts/script.js"></script>
   </body>
 </html>
