@@ -1,34 +1,65 @@
 const express = require("express");
 const cors = require("cors");
+require("dotenv").config();
 
 const app = express();
 
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
-  })
-);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.use(bodyParser.json());
+class CORS {
+  constructor(
+    allowedOrigins = ["http://localhost:3000"],
+    allowedMethods = ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders = ["Content-Type", "Authorization", "X-Requested-With"]
+  ) {
+    this.allowedOrigins = allowedOrigins;
+    this.allowedMethods = allowedMethods;
+    this.allowedHeaders = allowedHeaders;
+  }
 
-const cadastroRoutes = require("./routes/rotaCadastro");
-const authRoutes = require("./routes/authRoutes");
-const recoveryPasswordRoutes = require("./routes/recoverPasswordRoutes");
-const fiapRoutes = require("./routes/fiapRoutes");
+  configure() {
+    return (req, res, next) => {
+      const origin = req.get("Origin");
 
-app.use("/", authRoutes);
-app.use("/recoverPasswordRoutes", recoveryPasswordRoutes);
-app.use("/cadastro", cadastroRoutes);
-app.use("/login", fiapRoutes);
+      if (!origin) {
+        console.log("Requisição sem origin, seguindo...");
+        return next();
+      }
 
-app.get("/", (req, res) => {
-  res.send("Hello, Node.js!");
-});
+      if (this.allowedOrigins.includes(origin)) {
+        res.setHeader("Access-Control-Allow-Origin", origin);
+        res.setHeader("Access-Control-Allow-Credentials", "true");
+      } else {
+        res.status(403).send("Origem não permitida.");
+        return;
+      }
 
-const PORT = 3000;
+      res.setHeader(
+        "Access-Control-Allow-Methods",
+        this.allowedMethods.join(", ")
+      );
+      res.setHeader(
+        "Access-Control-Allow-Headers",
+        this.allowedHeaders.join(", ")
+      );
+
+      if (req.method === "OPTIONS") {
+        res.status(204).send();
+      } else {
+        next();
+      }
+    };
+  }
+}
+
+const corsobj = new CORS();
+app.use(corsobj.configure());
+
+const routes = require("./core/router.js");
+app.use("/", routes);
+
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
+  console.log(`Servidor rodando na porta ${PORT}`);
 });

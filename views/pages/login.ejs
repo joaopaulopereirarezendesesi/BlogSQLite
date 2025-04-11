@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/static/styles/style.css" />
-    <title>Cadastro</title>
+    <link rel="stylesheet" href="style.css" />
+    <title>S2_AT1_R3_PEND</title>
   </head>
   <body>
     <section class="father">
@@ -21,12 +21,12 @@
         <section class="sectext">
           <h1 class="formsh1">Cadastre-se</h1>
           <p class="formsp">
-            Preencha os campos abaixo e torne-se parte da nossa comunidade.
+            Preencha os campos abaixo e trone-se parte da nossa comunidade
           </p>
         </section>
-        <form action="/register" method="post" class="form" id="cadastroForm">
+        <form action="" method="get" class="form" id="cadastroForm">
           <section>
-            <input type="text" name="name" id="name" placeholder=" " required />
+            <input type="text" name="name" id="name" placeholder=" " />
             <label for="name" class="name">Nome</label>
           </section>
           <section>
@@ -67,7 +67,7 @@
             <input type="text" name="cpf" id="cpf" placeholder=" " required />
             <label for="cpf" class="cpf">CPF</label>
           </section>
-          <section>
+          <section class="rg">
             <input type="text" name="rg" id="rg" placeholder=" " required />
             <label for="rg" class="rg">RG</label>
           </section>
@@ -78,7 +78,6 @@
         </form>
       </section>
     </section>
-
-    <script src="/static/scripts/script.js"></script>
+    <script src="script.js"></script>
   </body>
 </html>
