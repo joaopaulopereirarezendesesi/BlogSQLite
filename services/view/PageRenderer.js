@@ -10,7 +10,9 @@ class PageRenderer {
     await this.loadDeclared();
 
     fsSync.watchFile(this.declaredJsonPath, async () => {
-      console.log("[PageRenderer] detected change in declared.json, reloading...");
+      console.log(
+        "[PageRenderer] detected change in declared.json, reloading..."
+      );
       await this.reloadCache();
     });
   }
@@ -31,18 +33,20 @@ class PageRenderer {
   async render(pageName, req, res) {
     try {
       const declared = await PageRenderer.loadDeclared();
-  
+
       if (!declared[pageName]) {
-        throw new Error(`Página "${pageName}" não encontrada no arquivo de declaração.`);
+        throw new Error(
+          `Página "${pageName}" não encontrada no arquivo de declaração.`
+        );
       }
-  
-      const variableMap = declared[pageName]; 
+
+      const variableMap = declared[pageName];
       const cookies = req.cookies || {};
       const query = req.query || {};
       const param = {};
-  
+
       param.currentPage = pageName;
-  
+
       for (const [key, source] of Object.entries(variableMap)) {
         if (source === "cookieOrQuery") {
           param[key] = cookies[key] ?? query[key] ?? null;
@@ -54,7 +58,7 @@ class PageRenderer {
           param[key] = null;
         }
       }
-  
+
       res.render(pageName, param);
     } catch (e) {
       console.error("PageRenderer-render", e.message);
