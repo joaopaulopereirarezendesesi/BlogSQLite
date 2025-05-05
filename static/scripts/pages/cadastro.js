@@ -36,7 +36,7 @@ const validateFields = () => {
 };
 
 const sendrequesty = async (dados) => {
-  await fetch("http://localhost:3000/cadastro", {
+  await fetch("http://localhost:3000/api/User/cadastro", {
     method: "POST",
     headers: { "Content-type": "application/json" },
     body: JSON.stringify(dados),

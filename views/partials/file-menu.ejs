@@ -1,0 +1,20 @@
+<section class="menu">
+  <button id="menuToggle">☰</button>
+  <nav id="menuNav" class="hidden">
+    <% if (user && user.role === 'admin') { %>
+      <a href="#" <% if (currentPage === 'home') { %> style="display:none;" <% } %>>Home</a>
+      <a href="#" <% if (currentPage === 'profile') { %> style="display:none;" <% } %>>Perfil</a>
+      <a href="#" <% if (currentPage === 'logout') { %> style="display:none;" <% } %>>Sair</a>
+      <a href="#" <% if (currentPage === 'admin/dashboard') { %> style="display:none;" <% } %>>Dashboard</a>
+      <a href="#" <% if (currentPage === 'admin/settings') { %> style="display:none;" <% } %>>Configurações</a>
+    <% } else if (user && user.role === 'user') { %>
+      <a href="#" <% if (currentPage === 'home') { %> style="display:none;" <% } %>>Home</a>
+      <a href="#" <% if (currentPage === 'profile') { %> style="display:none;" <% } %>>Perfil</a>
+      <a href="#" <% if (currentPage === 'logout') { %> style="display:none;" <% } %>>Sair</a>
+    <% } else { %>
+      <a href="http://localhost:3000/page/login" <% if (currentPage === 'login') { %> style="display:none;" <% } %>>Login</a>
+      <a href="http://localhost:3000/page/cadastro" <% if (currentPage === 'cadastro') { %> style="display:none;" <% } %>>Registrar</a>
+      <a href="#" <% if (currentPage === 'home') { %> style="display:none;" <% } %>>Home</a>
+    <% } %>
+  </nav>
+</section>

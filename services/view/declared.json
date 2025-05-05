@@ -1,0 +1,10 @@
+{
+  "login": {
+    "user": "cookie",
+    "currentPage": "ignore"
+  },
+  "cadastro": {
+    "user": "cookie",
+    "currentPage": "ignore"
+  }
+}

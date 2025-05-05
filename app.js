@@ -1,48 +1,59 @@
 const express = require("express");
-const path = require('path');
-const app = express();
-require("dotenv").config();
+const path = require("path");
+const dotenv = require("dotenv");
+dotenv.config();
 
-app.use(express.static(path.join(__dirname, 'public')));  
-app.use('/static', express.static(path.join(__dirname, 'static')));
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views', 'pages')); 
+const app = express();
+
+app.use(express.static(path.join(__dirname, "public")));
+app.use("/static", express.static(path.join(__dirname, "static")));
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views", "pages"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const CORS = (allowedOrigins = ["http://localhost:3000"]) => {
-  return (req, res, next) => {
+class CorsPolicy {
+  constructor(allowedOrigins = ["http://localhost:3000"]) {
+    this.allowedOrigins = allowedOrigins;
+    this.middleware = this.middleware.bind(this);
+  }
+
+  middleware(req, res, next) {
     const origin = req.get("Origin");
 
-    if (allowedOrigins.includes(origin)) {
-      res.setHeader("Access-Control-Allow-Origin", origin);
+    if (!origin || this.allowedOrigins.includes(origin)) {
+      if (origin) {
+        res.setHeader("Access-Control-Allow-Origin", origin);
+      }
       res.setHeader("Access-Control-Allow-Credentials", "true");
-    } else {
-      res.status(403).send("Origem não permitida.");
-      return;
+      res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+      res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
+
+      if (req.method === "OPTIONS") {
+        return res.sendStatus(204);
+      }
+
+      return next();
     }
 
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
+    return res.status(403).send("Origem não permitida.");
+  }
+}
 
-    if (req.method === "OPTIONS") {
-      res.status(204).send();
-    } else {
-      next();
-    }
-  };
-};
+const cors = new CorsPolicy(["http://localhost:3000"]);
+app.use(cors.middleware);
 
-app.use(CORS());
+const PageRenderer = require("./services/view/PageRenderer");
+PageRenderer.init().then(() => {
+  const Router = require("./core/router.js");
+  const router = new Router();
 
-const Router = require("./core/router.js");
-const router = new Router();
+  app.use(async (req, res) => {
+    await router.run(req, res);
+  });
 
-app.use(async (req, res) => {
-  await router.run(req, res);
-});
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}`);
+  });
 });

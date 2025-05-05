@@ -3,10 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/static/scripts/script.js" />
-    <title>S2_AT1_R3_PEND</title>
+    <link rel="stylesheet" href="/static/styles/pages/cadastro.css">
+    <link rel="stylesheet" href="/static/styles/partials/file-menu.css">
+    <title>Cadastro</title>
   </head>
   <body>
+    <%- include('./../partials/file-menu.ejs', { user }) %>
     <section class="father">
       <section class="img">
         <section class="black">
@@ -78,6 +80,7 @@
         </form>
       </section>
     </section>
-    <script src="script.js"></script>
+    <script src="/static/scripts/pages/cadastro.js"></script>
+    <script src="/static/scripts/partials/file-menu.js"></script>
   </body>
 </html>
